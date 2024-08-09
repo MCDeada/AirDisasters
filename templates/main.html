@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <header class="header">
+        <div class="container header__container">
+            <div class="header__row">
+                <nav class="header__nav nav">
+                    <a href="/filters-view/False" class="nav__link">
+                        <p class="nav__link__p">Задать фильтрацию катастроф</p>
+                    </a>
+                    <a href="/filters-view/True" class="nav__link">
+                        <p class="nav__link__p">Сбросить фильтрацию катастроф</p>
+                    </a>
+                    <a href="/create-report" class="nav__link">
+                        <p class="nav__link__p">Сформировать отчёт</p>
+                    </a>
+                    {% if metadata['user_role'] == 'Главный администратор' %}
+                        <a href="/get_all/history_of_users/1" class="nav__link">
+                            <p class="nav__link__p">Информация о пользователях</p>
+                        </a>
+                    {% endif %}
+                    {% if metadata['user_role'] in ['Администратор', 'Главный администратор'] %}
+                        <a href="/create-view/disasters" class="nav__link">
+                            <p class="nav__link__p">Добавить катастрофу</p>
+                        </a>
+                    {% endif %}
+                    <div class="dropdown nav__link">
+                        <p>Справочники</p>
+                        <div class="nav__dropdown">
+                            <a class="nav__link" rel="noopener" href="/get_all/weather_conditions/1">Виды погодных условий</a>
+                            <a class="nav__link" rel="noopener" href="/get_all/flight_phases/1">Стадии полета</a>
+                            <a class="nav__link" rel="noopener" href="/get_all/aircraft_conditions/1">Состояния после аварии</a>
+                            <a class="nav__link" rel="noopener" href="/get_all/aviation_accident_types/1">Типы происшествий</a>
+                            <a class="nav__link" rel="noopener" href="/get_all/airports/1">Аэропорты</a>
+                            <a class="nav__link" rel="noopener" href="/get_all/flight_types/1">Типы полетов</a>
+                            <a class="nav__link" rel="noopener" href="/get_all/countries/1">Страны</a>
+                            <a class="nav__link" rel="noopener" href="/get_all/engine_types/1">Модели двигателей</a>
+                            <a class="nav__link" rel="noopener" href="/get_all/aircraft_types/1">Модели самолетов </a>
+                            <a class="nav__link" rel="noopener" href="/get_all/engines_types_to_aircraft_types/1">Привязка моделей самолетов к моделям двигателей</a>
+                            <a class="nav__link" rel="noopener" href="/get_all/disasters/1">Катастрофы</a>
+                            <a class="nav__link" rel="noopener" href="/get_all/operators/1">Операторы</a>
+                            {% if metadata['user_role'] == 'Главный администратор' %}
+                                <a class="nav__link" rel="noopener" href="/get_all/roles/1">Типы ролей</a>
+                                <a class="nav__link" rel="noopener" href="/get_all/users_actions/1">Типы действий пользователей</a>
+                                <a class="nav__link" rel="noopener" href="/get_all/users/1">Список пользователей</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <a href="/user_page" class="nav__link">
+                        <p class="nav__link__p">Личный кабинет</p>
+                    </a>
+                    <a href="/logout" class="nav__link">
+                        <p class="nav__link__p">Выйти из системы</p>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div class="container content__container">
+        {% if metadata['is_sorting'] %}
+            <div class="content_menu_displayed">
+                <h3 class="content_menu_displayed__header">Текущие фильтры</h3>
+                {% for field, value in metadata['disasters_filters_values'].items() %}
+                    <div class="content_menu_displayed__block">
+                        <div class="content_menu_displayed__label">
+                            {{ metadata['disasters_filters_titles'][field]['title'] }}
+                        </div>
+                        <div class="content_menu_displayed__value">
+                            {% if value != '' %}
+                                {{ value }}
+                            {% else %}
+                                Не выбрано
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="main_content">
+            {% if get_flashed_messages() %}
+                    <div class="alert__container {{ metadata['alert__container__background'] }}"
+                         id="alert__container">
+                    {% for message in get_flashed_messages() %}
+                        <div class="alert__message">{{ message }}</div>
+                            <button class="alert__button" onclick="closeButton()">
+                                <img src="/static/cross-svgrepo-com.png" alt="">
+                            </button>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% block main_content %} {% endblock %}
+        </div>
+    </div>
+    <div class="footer"></div>
+    <script src='/static/close_alert.js'></script>
+{% endblock %}

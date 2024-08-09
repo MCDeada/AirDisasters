@@ -1,0 +1,69 @@
+{% extends 'main.html' %}
+
+{% block main_content %}
+    <h2>{{ metadata['title'] }}</h2>
+    <form method="POST"
+          enctype="multipart/form-data"
+          action="{{ url_for('update', table_name=metadata['table_name'],
+                             data_row=data_row,
+                             data_foreign=data_foreign) }}">
+        <input class="row__id" type="text" name="row_id"
+               value="{{ row_id }}">
+        {% for column_name, column_value in data_row.items() %}
+            <div class="input_element">
+                <label for="{{ column_name }}"
+                       title="{{ metadata['table_fields'][column_name]['title'] }}">
+                    {{ metadata['table_fields'][column_name]['header'] }}
+                    {% if not metadata['table_fields'][column_name]['is_null'] %}
+                        <span title="{{ metadata['table_fields'][column_name]['title'] }}">
+                            *
+                        </span>
+                    {% endif %}
+                </label>
+                {% if metadata['table_fields'][column_name]['display'] == 'input_select' %}
+                    <input type="text" value="{{ column_value }}" name="{{ column_name }}" list="{{ column_name }}">
+                    <datalist id="{{ column_name }}">
+                        {% for column_foreign_key, column_foreign_value
+                           in data_foreign[column_name].items() %}
+                            <option value="{{ column_foreign_key }}"></option>
+                        {% endfor %}
+                    </datalist>
+                {% endif %}
+                {% if metadata['table_fields'][column_name]['display'] == 'select' %}
+                    <select name="{{ column_name }}">
+                        {% for column_foreign_key, column_foreign_value in data_foreign[column_name].items() %}
+                            {% if column_foreign_key == column_value %}
+                                <option value="{{ column_foreign_key }}" selected>
+                                    {{ column_foreign_value }}
+                                </option>
+                            {% else %}
+                                <option value="{{ column_foreign_key }}">
+                                    {{ column_foreign_value }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                {% endif %}
+                {% if metadata['table_fields'][column_name]['display'] == 'input' %}
+                    <input type="{{ metadata['table_fields'][column_name]['type'] }}"
+                           step="any" name="{{ column_name }}"
+                           max="{{ metadata['table_fields'][column_name]['max_value'] }}"
+                           min="{{ metadata['table_fields'][column_name]['min_value'] }}"
+                           value="{{ column_value }}" accept="image/jpeg, image/png, image/jpg">
+                {% endif %}
+                {% if metadata['table_fields'][column_name]['display'] == 'textarea' %}
+                    {% if column_value != '' %}
+                        <textarea name="{{ column_name }}">
+                            {{ column_value }}
+                        </textarea>
+                    {% else %}
+                        <textarea name="{{ column_name }}"></textarea>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="get__buttons">
+            <button class="form__button btn" type="submit">Изменить</button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'main.html' %}
+
+{% block main_content %}
+    <div class="title__block">
+        <h2 class="get_title"> {{ metadata['title'] }}</h2>
+        {% if metadata['table_name'] == 'disasters' %}
+            <form method="POST" class="find__form"
+                  action="{{ url_for(
+                        'find', table_name=metadata['table_name']
+                  ) }}">
+                <input type="text" name="find"
+                       value="{{ metadata['in_search']['value'] }}">
+                <input class="form__button find__button" type="submit"
+                   name="exec_find" value="Найти" />
+                <input class="form__button find__button" type="submit"
+                   name="clear_find" value="Очистить поиск" />
+            </form>
+        {% endif %}
+    </div>
+    <div class="content__rows__users">
+        <div class="row__header">
+            {% for column_name, column_value in metadata['table_fields'].items() %}
+                {% if column_value['in_list'] %}
+                    <div class="row__value">
+                        {{ metadata['table_fields'][column_name]['header'] }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% for row in data_rows %}
+            {% if metadata['active'] %}
+                <a href="/get/{{ metadata['table_name'] }}/{{ row['id'] }}"
+                   class="row__values">
+                    {% for column_name, column_value in metadata['table_fields'].items() %}
+                        {% if column_value['in_list'] %}
+                            <div class="row__value">
+                                {{ row[column_name] }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </a>
+            {% else %}
+                <div class="row__values">
+                    {% for column_name, column_value in metadata['table_fields'].items() %}
+                        {% if column_value['in_list'] %}
+                            <div class="row__value">
+                                {{ row[column_name] }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="row__bottom">
+            <div>
+                {% if page_number > 1 %}
+                    <a class="btn"
+                       href="/get_all/{{ metadata['table_name'] }}/{{ page_number - 1 }}">
+                        Назад
+                    </a>
+                {% endif %}
+            </div>
+            <div>
+                {% if metadata['data_rows_length'] == 10 and metadata['isNext'] %}
+                    <a class="btn"
+                       href="/get_all/{{ metadata['table_name'] }}/{{ page_number + 1 }}">
+                        Дальше
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

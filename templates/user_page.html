@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="user__page">
+        {% if get_flashed_messages() %}
+                <div class="alert__container {{ metadata['alert__container__background'] }}"
+                     id="alert__container">
+                {% for message in get_flashed_messages() %}
+                    <div class="alert__message">{{ message }}</div>
+                        <button class="alert__button" onclick="closeButton()">
+                            <img src="/static/cross-svgrepo-com.png" alt="">
+                        </button>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <h2>Информация о пользователе</h2>
+        <div>
+            <div title="{{ metadata['table_fields']['user_name']['title'] }}">
+                Имя: {{ user_info['user_name'] }}
+            </div>
+        </div>
+        <div>
+            <div title="{{ metadata['table_fields']['user_surname']['title'] }}">
+                Фамилия: {{ user_info['user_surname'] }}
+            </div>
+        </div>
+        <div>
+            <div title="{{ metadata['table_fields']['user_patronymic']['title'] }}">
+                Отчество: {{ user_info['user_patronymic'] }}
+            </div>
+        </div>
+        <div>
+            <div title="{{ metadata['table_fields']['id_role']['title'] }}">
+                Ваш уровень доступа: {{ user_info['id_role'] }}
+            </div>
+        </div>
+        <div>
+            <form action="{{ url_for('user_page') }}" method="POST" class="user__page__form">
+                <div title="{{ metadata['table_fields']['login']['title'] }}">
+                    <label for="login">Имя входа пользователя: </label>
+                </div>
+                <div>
+                    <input id="login" type="text" name="login" value="{{ user_info['login'] }}" >
+                </div>
+                <button class="update__button btn" type="submit">
+                    Изменить логин
+                </button>
+            </form>
+        </div>
+        <div>
+            <form action="{{ url_for('user_page') }}" method="POST" class="user__page__form">
+                <div title="{{ metadata['table_fields']['user_password']['title'] }}">
+                    <label for="user_password">Пароль: </label>
+                </div>
+                <div>
+                    <input id="user_password" type="password" name="user_password">
+                </div>
+                <button class="update__button btn" type="submit">
+                    Изменить пароль
+                </button>
+            </form>
+        </div>
+        <a class="form__button btn"  href="get_all/disasters/1">Вернуться на главную</a>
+        <script src='/static/close_alert.js'></script>
+    </div>
+{% endblock %}

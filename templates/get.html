@@ -1,0 +1,44 @@
+{% extends 'main.html' %}
+
+{% block main_content %}
+    <form method="GET"
+          action="{{ url_for(
+              'update_view', table_name=metadata['table_name'],
+              row_id=row_id) }}">
+        {% for column_name, column_value in data_row.items() %}
+            <div class="input_element">
+                <div class="input_element__row">
+                    {{ metadata['table_fields'][column_name]['header'] }}
+                </div>
+                <div class="input_element__row">
+                    {% if column_name in ['row_before_action', 'row_after_action'] and column_value != 'Нет данных' %}
+                        {% for column_name_json, column_value_json in column_value.items() %}
+                            <div>{{ column_name_json }}: {{ column_value_json }}</div>
+                        {% endfor %}
+                    {% else %}
+                        {{ column_value }}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        {% if metadata['table_name'] == 'disasters' %}
+            <div class="input_element">
+                <div class="input_element__row">
+                    {{ metadata['table_fields']['photo_of_result']['header'] }}
+                </div>
+                <div class="input_element__row">
+                    <img src="data:;base64,{{ image }}"/>
+                </div>
+            </div>
+        {% endif %}
+        <div class="get__buttons">
+            {% if metadata['table_name'] not in ['history_of_users', 'users', 'roles', 'action_names'] %}
+                <button class="form__button btn" type="submit">Изменить</button>
+            {% endif %}
+            <a class="btn" rel="noopener"
+               href="/get_all/{{ metadata['table_name'] }}/1">
+                Вернуться к общему списку
+            </a>
+        </div>
+    </form>
+{% endblock %}

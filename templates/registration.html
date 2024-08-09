@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="auth__menu">
+        {% if get_flashed_messages() %}
+            <div class="alert__container {{ metadata['alert__container__background'] }}"
+                 id="alert__container">
+                {% for message in get_flashed_messages() %}
+                    <div class="alert__message">{{ message }}</div>
+                        <button class="alert__button" onclick="closeButton()">
+                            <img src="/static/cross-svgrepo-com.png" alt="">
+                        </button>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <h2>{% block title %} Регистрация в системе {% endblock %}</h2>
+        <form method="post" action="/registration">
+            <label for="user_name"
+                   title="{{ metadata['table_fields']['user_name']['title'] }}">
+                Ваше имя*
+            </label>
+            <br>
+            <input id="user_name" type="text" name="user_name"
+                   placeholder=""
+                   value="{{ request.form['user_name'] }}">
+            <br>
+            <label for="user_surname"
+                   title="{{ metadata['table_fields']['user_surname']['title'] }}">
+                Ваша фамилия*
+            </label>
+            <br>
+            <input id="user_surname" type="text" name="user_surname"
+                   placeholder=""
+                   value="{{ request.form['user_surname'] }}">
+            <br>
+            <label for="user_patronymic"
+                   title="{{ metadata['table_fields']['user_patronymic']['title'] }}">
+                Ваше отчество*
+            </label>
+            <br>
+            <input id="user_patronymic" type="text" name="user_patronymic"
+                   placeholder=""
+                   value="{{ request.form['user_patronymic'] }}">
+            <br>
+            <label for="login"
+                   title="{{ metadata['table_fields']['login']['title'] }}">
+                Логин*
+            </label>
+            <br>
+            <input id="login" type="text" name="login"
+                   placeholder=""
+                   value="{{ request.form['login'] }}">
+            <br>
+            <label for="password"
+                   title="{{ metadata['table_fields']['user_password']['title'] }}">
+                Пароль*
+            </label>
+            <br>
+            <input id="password" type="password" name="user_password"
+                   placeholder=""
+                   value="{{ request.form['user_password'] }}">
+            <br>
+            <button class="btn" type="submit">Зарегистрироваться</button>
+        </form>
+    </div>
+    <script src='/static/close_alert.js'></script>
+{% endblock %}

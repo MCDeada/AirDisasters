@@ -1,0 +1,494 @@
+{% extends 'main.html' %}
+
+{% block main_content %}
+<h3>Параметры поиска</h3>
+<form method="POST"
+      action="{{ url_for('update_filters') }}"
+      class="filters__form">
+    <div>
+        <label for="min_datetime">
+            Произошли с момента:
+        </label>
+    </div>
+    <div>
+        <input value="{{ disasters_filters['min_datetime'] }}" id="min_datetime"
+               type="date" name="min_datetime" max="2500-01-01" min="1900-01-01">
+    </div>
+    <div class="filters__field__buttons"></div>
+    <div>
+        <label for="max_datetime">
+            Произошли до момента:
+        </label>
+    </div>
+    <div>
+        <input value="{{ disasters_filters['max_datetime'] }}" id="max_datetime"
+               type="date" name="max_datetime" max="2500-01-01" min="1900-01-01">
+    </div>
+    <div class="filters__field__buttons"></div>
+    <div>
+        <label for="flight_type">
+            Выбрать или исключить тип полета:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="flight_type" list="flight_type">
+        <datalist id="flight_type">
+            {% for column_foreign_key, column_foreign_value
+               in data_foreign['flight_type'].items() %}
+                <option value="{{ column_foreign_value }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Выбрать тип полета" />
+        <input class="form__button btn" type="submit"
+               name="action" value="Исключить тип полета" />
+    </div>
+    <div>
+        <label for="flight_type">
+            Текущие выбранные типы полета:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="flight_type_chosen" list="flight_type_chosen">
+        <datalist id="flight_type_chosen">
+            {% for column_key in disasters_filters_lists['flight_type'] %}
+                <option value="{{ column_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Очистить выбранные типы полетов" />
+    </div>
+    <div>
+        <label for="operator">
+            Выбрать или исключить авиаперевозчика:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="operator" list="operator">
+        <datalist id="operator">
+            {% for column_foreign_key, column_foreign_value
+               in data_foreign['operator'].items() %}
+                <option value="{{ column_foreign_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Выбрать авиаперевозчика" />
+        <input class="form__button btn" type="submit"
+               name="action" value="Исключить авиаперевозчика" />
+    </div>
+    <div>
+        <label for="flight_type">
+            Текущие выбранные авиаперевозчики:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="operator_chosen" list="operator_chosen">
+        <datalist id="operator_chosen">
+            {% for column_key in disasters_filters_lists['operator'] %}
+                <option value="{{ column_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Очистить выбранных авиаперевозчиков" />
+    </div>
+    <div>
+        <label for="aircraft_model_type">
+            Выбрать или исключить модель самолета:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="aircraft_model_type" list="aircraft_model_type">
+        <datalist id="aircraft_model_type">
+            {% for column_foreign_key, column_foreign_value
+               in data_foreign['aircraft_model_type'].items() %}
+                <option value="{{ column_foreign_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Выбрать модель самолета" />
+        <input class="form__button btn" type="submit"
+               name="action" value="Исключить модель самолета" />
+    </div>
+    <div>
+        <label for="aircraft_model_type">
+            Текущие выбранные модели самолетов:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="aircraft_model_type_chosen" list="aircraft_model_type_chosen">
+        <datalist id="aircraft_model_type_chosen">
+            {% for column_key in disasters_filters_lists['aircraft_model_type'] %}
+                <option value="{{ column_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Очистить выбранные модели самолетов" />
+    </div>
+    <div>
+        <label for="engine_model_type">
+            Выбрать или исключить модель двигателя:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="engine_model_type" list="engine_model_type">
+        <datalist id="engine_model_type">
+            {% for column_foreign_key, column_foreign_value
+               in data_foreign['engine_model_type'].items() %}
+                <option value="{{ column_foreign_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Выбрать модель двигателя" />
+        <input class="form__button btn" type="submit"
+               name="action" value="Исключить модель двигателя" />
+    </div>
+    <div>
+        <label for="engine_model_type">
+            Текущие выбранные модели двигателя:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="engine_model_type_chosen" list="engine_model_type_chosen">
+        <datalist id="engine_model_type_chosen">
+            {% for column_key in disasters_filters_lists['engine_model_type'] %}
+                <option value="{{ column_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Очистить выбранные модели двигателей" />
+    </div>
+    <div>
+        <label for="departure_place">
+            На рейсе из аэропорта:
+        </label>
+    </div>
+    <div>
+        <input value="{{ disasters_filters['departure_place'] }}"
+               type="text" name="departure_place"
+               list="departure_place">
+        <datalist id="departure_place">
+            {% for column_foreign_key, column_foreign_value
+               in data_foreign['departure_place'].items() %}
+                <option value="{{ column_foreign_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons"></div>
+    <div>
+        <label for="destination_place">
+            На рейсе в аэропорт:
+        </label>
+    </div>
+    <div>
+        <input value="{{ disasters_filters['destination_place'] }}"
+               type="text" name="destination_place"
+               list="destination_place">
+        <datalist id="destination_place">
+            {% for column_foreign_key, column_foreign_value
+               in data_foreign['destination_place'].items() %}
+                <option value="{{ column_foreign_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons"></div>
+    <div>
+        <label for="is_any_crew_dead">
+            Есть потери среди экипажа:
+        </label>
+    </div>
+    <div>
+        <select name="is_any_crew_dead" id="is_any_crew_dead">
+            {% if disasters_filters['is_any_crew_dead'] == '' %}
+                <option value="" selected>Не выбрано</option>
+            {% else %}
+                <option value="">Не выбрано</option>
+            {% endif %}
+            {% if disasters_filters['is_any_crew_dead'] == 'True' %}
+                <option value="True" selected>Есть</option>
+            {% else %}
+                <option value="True">Есть</option>
+            {% endif %}
+            {% if disasters_filters['is_any_crew_dead'] == 'False' %}
+                <option value="False" selected>Нет</option>
+            {% else %}
+                <option value="False">Нет</option>
+            {% endif %}
+        </select>
+    </div>
+    <div class="filters__field__buttons"></div>
+    <div>
+        <label for="is_any_passengers_dead">
+            Есть потери среди пассажиров:
+        </label>
+    </div>
+    <div>
+        <select name="is_any_passengers_dead" id="is_any_passengers_dead">
+            {% if disasters_filters['is_any_passengers_dead'] == '' %}
+                <option value="" selected>Не выбрано</option>
+            {% else %}
+                <option value="">Не выбрано</option>
+            {% endif %}
+            {% if disasters_filters['is_any_passengers_dead'] == 'True' %}
+                <option value="True" selected>Есть</option>
+            {% else %}
+                <option value="True">Есть</option>
+            {% endif %}
+            {% if disasters_filters['is_any_passengers_dead'] == 'False' %}
+                <option value="False" selected>Нет</option>
+            {% else %}
+                <option value="False">Нет</option>
+            {% endif %}
+        </select>
+    </div>
+    <div class="filters__field__buttons"></div>
+    <div>
+        <label for="temperature_min">
+            Нижняя температурная граница:
+        </label>
+    </div>
+    <div>
+        <input value="{{ disasters_filters['temperature_min'] }}" id="temperature_min"
+               type="number" min="-100" max="100" step="any" name="temperature_min">
+    </div>
+    <div class="filters__field__buttons"></div>
+    <div>
+        <label for="temperature_max">
+            Верхняя температурная граница:
+        </label>
+    </div>
+    <div>
+        <input value="{{ disasters_filters['temperature_max'] }}" id="temperature_max"
+               type="number" min="-100" max="100" step="any" name="temperature_max">
+    </div>
+    <div class="filters__field__buttons"></div>
+    <div>
+        <label for="pressure_min">
+            Нижняя граница давления (мм.рт.ст.):
+        </label>
+    </div>
+    <div>
+        <input value="{{ disasters_filters['pressure_min'] }}" id="pressure_min"
+               type="number" min="0" max="825" step="any" name="pressure_min">
+    </div>
+    <div class="filters__field__buttons"></div>
+    <div>
+        <label for="pressure_max">
+            Верхняя граница давления (мм.рт.ст.):
+        </label>
+    </div>
+    <div>
+        <input value="{{ disasters_filters['pressure_max'] }}" id="pressure_max"
+               type="number" min="0" max="825" step="any" name="pressure_max">
+    </div>
+    <div class="filters__field__buttons"></div>
+    <div>
+        <label for="weather_condition">
+            Выбрать или исключить погодные условия:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="weather_condition" list="weather_condition">
+        <datalist id="weather_condition">
+            {% for column_foreign_key, column_foreign_value
+               in data_foreign['weather_condition'].items() %}
+                <option value="{{ column_foreign_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Выбрать вид погодных условий" />
+        <input class="form__button btn" type="submit"
+               name="action" value="Исключить вид погодных условий" />
+    </div>
+    <div>
+        <label for="weather_condition">
+            Текущие выбранные погодные условия:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="weather_condition_chosen" list="weather_condition_chosen">
+        <datalist id="weather_condition_chosen">
+            {% for column_key in disasters_filters_lists['weather_condition'] %}
+                <option value="{{ column_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Очистить выбранные погодные условия" />
+    </div>
+    <div>
+        <label for="country">
+            Выбрать или исключить страну происшествия:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="country" list="country">
+        <datalist id="country">
+            {% for column_foreign_key, column_foreign_value
+               in data_foreign['country'].items() %}
+                <option value="{{ column_foreign_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Выбрать страну происшествия" />
+        <input class="form__button btn" type="submit"
+               name="action" value="Исключить страну происшествия" />
+    </div>
+    <div>
+        <label for="country">
+            Текущие выбранные страны происшествий:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="country_chosen" list="country_chosen">
+        <datalist id="country_chosen">
+            {% for column_key in disasters_filters_lists['country'] %}
+                <option value="{{ column_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Очистить выбранные страны происшествий" />
+    </div>
+    <div>
+        <label for="flight_phase">
+            Выбрать или исключить фазу полета:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="flight_phase" list="flight_phase">
+        <datalist id="flight_phase">
+            {% for column_foreign_key, column_foreign_value
+               in data_foreign['flight_phase'].items() %}
+                <option value="{{ column_foreign_value }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Выбрать фазу полета" />
+        <input class="form__button btn" type="submit"
+               name="action" value="Исключить фазу полета" />
+    </div>
+    <div>
+        <label for="flight_phase">
+            Текущие выбранные фазы полета:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="flight_phase_chosen" list="flight_phase_chosen">
+        <datalist id="flight_phase_chosen">
+            {% for column_key in disasters_filters_lists['flight_phase'] %}
+                <option value="{{ column_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Очистить выбранные фазы полетов" />
+    </div>
+    <div>
+        <label for="aircraft_condition">
+            Выбрать или исключить состояние самолета:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="aircraft_condition" list="aircraft_condition">
+        <datalist id="aircraft_condition">
+            {% for column_foreign_key, column_foreign_value
+               in data_foreign['aircraft_condition'].items() %}
+                <option value="{{ column_foreign_value }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Выбрать состояние самолета" />
+        <input class="form__button btn" type="submit"
+               name="action" value="Исключить состояние самолета" />
+    </div>
+    <div>
+        <label for="aircraft_condition">
+            Текущие выбранные состояния самолетов:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="aircraft_condition_chosen" list="aircraft_condition_chosen">
+        <datalist id="aircraft_condition_chosen">
+            {% for column_key in disasters_filters_lists['aircraft_condition'] %}
+                <option value="{{ column_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Очистить выбранные состояния самолетов" />
+    </div>
+
+    <div>
+        <label for="disaster_accident">
+            Выбрать или исключить тип катастрофы:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="disaster_accident" list="disaster_accident">
+        <datalist id="disaster_accident">
+            {% for column_foreign_key, column_foreign_value
+               in data_foreign['disaster_accident'].items() %}
+                <option value="{{ column_foreign_value }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Выбрать тип катастрофы" />
+        <input class="form__button btn" type="submit"
+               name="action" value="Исключить тип катастрофы" />
+    </div>
+    <div>
+        <label for="disaster_accident">
+            Текущие выбранные типы катастроф:
+        </label>
+    </div>
+    <div>
+        <input type="text" name="disaster_accident_chosen" list="disaster_accident_chosen">
+        <datalist id="disaster_accident_chosen">
+            {% for column_key in disasters_filters_lists['disaster_accident'] %}
+                <option value="{{ column_key }}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="filters__field__buttons">
+        <input class="form__button btn" type="submit"
+               name="action" value="Очистить выбранные типы катастроф" />
+    </div>
+    <div class="get__buttons">
+        <button class="form__button btn" type="submit">Найти</button>
+        <a href="/filters-view/True" class="form__button btn">
+            Сбросить фильтрацию катастроф
+        </a>
+    </div>
+</form>
+
+{% endblock %}
